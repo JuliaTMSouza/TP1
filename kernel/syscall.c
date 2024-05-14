@@ -99,7 +99,7 @@ extern uint64 sys_mkdir(void);
 extern uint64 sys_close(void);
 extern uint64 sys_getcnt(void);
 
-uint64 *syscallCounter[];
+uint64 *syscallCounter[21];
 
 // An array mapping syscall numbers from syscall.h
 // to the function that handles the system call.
@@ -132,18 +132,19 @@ uint64
 sys_getcnt(void)
 {
   int calledProc;
-  struct proc *p = myproc();
 
   argint(1, &calledProc);
 
   if (calledProc > 0 && calledProc < NELEM(syscalls) && syscalls[calledProc])
   {
-    syscallCounter[calledProc-1];
+    uint64 *value = syscallCounter[calledProc-1];
+    return *value;
     // Use calledProc to lookup the system call function for num
   }
   else
   {
     printf("Unknown sys call %d\n", calledProc);
+    return -1;
   }
 }
 
